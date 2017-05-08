@@ -6,7 +6,6 @@ from tkinter import ttk
 class Navbar(tk.Frame):
     def __init__(self, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
-      
         
         navbar = tk.Frame()
         navbar.pack()
@@ -17,23 +16,29 @@ class Navbar(tk.Frame):
                 ("F17"),
             ]
         
-        self.term = "S17"
         
-        #self.v.set("F16") # initialize
-             
+        self.term = tk.StringVar()
+        self.term.set("S17")
+        
         for text in TERMS:
-            b = tk.Radiobutton(navbar, text=text, value=text, variable=self.term, command = self.updateStatus)
+            b = tk.Radiobutton(navbar, text=text, value=text, variable = self.term, command = self.updateStatus)
             b.pack(side="left")     
         
+        b.radiobutton = self.term
         
-        self.period = 2
+        self.period = tk.IntVar()
+        self.period.set = 2
         
         for periodVal in range(1,9):
             p = tk.Radiobutton(root, text=periodVal, value=periodVal, variable = self.period, command = self.updateStatus)
-            p.pack()
+            p.pack() 
+        
+        p.radiobutton = self.period
+        
+        
 
     def updateStatus(self):
-            print("term: ", self.term, "period:", self.period)
+            print("term: ", self.term.get(), "period:", self.period.get())
     
 class MainApplication(tk.Frame):
     def __init__(self, parent, *args, **kwargs):
