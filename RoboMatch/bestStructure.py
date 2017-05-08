@@ -2,6 +2,9 @@
 
 import tkinter as tk
 from tkinter import ttk
+import sqlite3
+import sys
+from _sqlite3 import DatabaseError
 
 class Navbar(tk.Frame):
     def __init__(self, *args, **kwargs):
@@ -22,7 +25,7 @@ class Navbar(tk.Frame):
         
         for text in TERMS:
             b = tk.Radiobutton(navbar, text=text, value=text, variable = self.term, command = self.updateStatus)
-            b.pack(side="left")     
+            b.pack(side=tk.TOP)     
         
         b.radiobutton = self.term
         
@@ -31,10 +34,28 @@ class Navbar(tk.Frame):
         
         for periodVal in range(1,9):
             p = tk.Radiobutton(root, text=periodVal, value=periodVal, variable = self.period, command = self.updateStatus)
-            p.pack() 
+            p.pack(side=tk.LEFT) 
         
         p.radiobutton = self.period
         
+        #listbox widget to select game
+        gameListBox = tk.Listbox(navbar, height=10)
+        gameListBox.pack(side=tk.BOTTOM)
+
+        #populate list box
+        try:
+            conn = sqlite3.connect('./RoboMatch.db')
+            curs = conn.cursor()
+            
+            for row in curs.execute("SELECT * FROM games"):
+                gameListBox.insert(tk.END,row)
+            conn.close()
+            
+        except DatabaseError:
+            print("teams reading exception")
+            e = sys.exc_info()[0]
+            print(">Error: %s</p>" % e )
+            pass
         
 
     def updateStatus(self):
